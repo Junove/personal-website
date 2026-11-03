@@ -1,9 +1,9 @@
-<!-- BEGIN:nextjs-agent-rules -->
+## Color usage
 
-## This is NOT the Next.js you know
+This site's palette lives in `src/app/globals.css` as CSS custom properties, with light values in `:root` and dark overrides in `:root[data-theme="dark"]`. Before adding or changing any color usage (new component, new palette, new variable), check actual contrast, not just hue intent:
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- Grep for every existing usage of a variable before reusing it (e.g. `grep -rn "accent-light" src/`) — a token's name doesn't guarantee how it's used elsewhere. `accent-light` in this codebase is always a pale/dark *background tint* paired with `accent-primary` or `text-primary` text (active nav tab, blog badges, card hover, text selection) — it must stay light enough (light theme) or dark enough (dark theme) for that foreground text to read clearly, regardless of what hue or lightness a new design system assigns the same name.
+- When adopting colors from an external design system/brand, don't copy token values verbatim if the token's *semantic role* there doesn't match how this codebase actually uses the equally-named variable here. Re-derive the value to satisfy this codebase's real usage instead.
+- Check text/background pairs reach roughly 4.5:1 contrast (3:1 for large text/borders). A quick manual sRGB relative-luminance check is fine if no tool is available.
+- `Navbar`/`Footer` sit on `--chrome`, with a `--chrome-edge` border. Both are per-theme aliases of existing tokens, not new colors: in light `--chrome` is `--surface-200` (darker than the page) with a `--neutral-500` edge; in dark it is `--surface-50` (lighter than the page) with a `--neutral-400` edge. The chrome moves *away* from the page surface in opposite directions per theme, which is deliberate — don't collapse it back to one token for both. They originally shared the page surface and relied on the border alone; that was dropped because the header was the same color as the page. Keep the chrome off any surface the page bands use, keep the edge at 3:1 against it, and re-check both themes visually before changing either.
+- Dark mode is not an inverted light mode: its surfaces are near-neutral with only a green hint, spread over a wide tonal range (`--surface-200` L* ≈ 3, `--surface-100` L* ≈ 11, `--surface-50` L* ≈ 21) so the three planes separate and the olive accent carries the brand. Don't flatten them back toward one olive.

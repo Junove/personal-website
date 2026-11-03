@@ -1,26 +1,379 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
 @import "tailwindcss";
 
+/* Untyped custom properties can't be interpolated, so a value swap on them is
+   discrete (jumps partway through the transition) rather than smooth. Typing
+   these two lets `.hero-wash`'s gradient — the only background-image in the
+   palette, so the only thing that needs this — recompute smoothly frame by
+   frame as the colors tween, instead of snapping once (see transition list
+   below, which animates these variables themselves, not background-image). */
+@property --surface-50 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #fbf7ee;
+}
+@property --surface-100 {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #e2d7b8;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --surface-50: #fbf7ee;
+  --surface-100: #e2d7b8;
+  --surface-200: #e2d7b8;
+  --chrome: var(--surface-200);
+  --chrome-edge: var(--neutral-500);
+  --neutral-300: #b3a276;
+  --neutral-400: #8d8255;
+  --neutral-500: #6b6448;
+  --accent-primary: #4a5c26;
+  --accent-hover: #3b4a1d;
+  --accent-light: #dfe6c8;
+  --accent-contrast: #ffffff;
+  --text-primary: #262312;
+  --text-secondary: #464130;
+  --text-muted: #635d44;
+  --success: #3f6b2a;
+  --success-contrast: #ffffff;
+  --warning: #7d5a21;
+  --error: #8a2f26;
+  --shadow-sm: 0 1px 2px rgba(38, 35, 18, 0.07);
+  --shadow-md: 0 4px 8px rgba(38, 35, 18, 0.1);
+  --shadow-lg: 0 12px 20px rgba(38, 35, 18, 0.14);
+}
+
+:root[data-theme="dark"] {
+  --surface-50: #2f352b;
+  --surface-100: #1a1e16;
+  --surface-200: #0c0e09;
+  --chrome: var(--surface-50);
+  --chrome-edge: var(--neutral-400);
+  --neutral-300: #787f6e;
+  --neutral-400: #8e9480;
+  --neutral-500: #b3b8a4;
+  --accent-primary: #aec47a;
+  --accent-hover: #c2d692;
+  --accent-light: #333d1c;
+  --accent-contrast: #191c13;
+  --text-primary: #efe7d2;
+  --text-secondary: #cbc3ab;
+  --text-muted: #a39b80;
+  --success: #8fb562;
+  --success-contrast: #191c13;
+  --warning: #cfa559;
+  --error: #d4756a;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 20px rgba(0, 0, 0, 0.5);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--surface-100);
+  --color-foreground: var(--text-primary);
+
+  --color-surface-50: var(--surface-50);
+  --color-surface-100: var(--surface-100);
+  --color-surface-200: var(--surface-200);
+  --color-chrome: var(--chrome);
+  --color-chrome-edge: var(--chrome-edge);
+
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+
+  --color-accent: var(--accent-primary);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-light: var(--accent-light);
+  --color-accent-contrast: var(--accent-contrast);
+
+  --color-fg: var(--text-primary);
+  --color-fg-soft: var(--text-secondary);
+  --color-fg-muted: var(--text-muted);
+
+  --color-success: var(--success);
+  --color-success-contrast: var(--success-contrast);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+
+  --font-sans: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Source Serif 4', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+
+  --ease-standard: cubic-bezier(0.2, 0, 0.2, 1);
+  --transition-hover: 0.15s var(--ease-standard);
+  --transition-theme: 0.7s ease;
+  --transition-color: var(--transition-theme);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  transition:
+    background-color var(--transition-color),
+    border-color var(--transition-color),
+    color var(--transition-color),
+    --surface-50 var(--transition-color),
+    --surface-100 var(--transition-color);
+}
+
+html {
+  height: 100%;
+  overscroll-behavior: none;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--surface-100);
+  color: var(--text-primary);
+  @apply font-serif;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 24px;
 }
+
+.scroll-area {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  /* The in-page nav jumps within this container, not the window. */
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--accent-light);
+  color: var(--text-primary);
+}
+
+/* ---------- Typography ----------
+   Declared with `@utility` rather than as bare classes so they are real
+   Tailwind utilities: they compose with variants (`sm:`, `dark:`) and sit in
+   the utilities layer with everything else. Font families come from the
+   `--font-*` theme tokens above via `@apply`, never a repeated literal. */
+
+@utility heading-1 {
+  @apply font-serif;
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+@utility heading-3 {
+  @apply font-serif;
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+
+@utility caption {
+  @apply font-serif;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
+
+@utility label {
+  @apply font-sans;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+@utility section-heading {
+  @apply font-serif;
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 0.75rem;
+  display: inline-block;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 48px;
+    height: 3px;
+    background: var(--accent-primary);
+  }
+}
+
+/* ---------- Focus ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--accent-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ---------- Animation utilities ----------
+   Hover/press effects are CSS: they need no JS and cannot desync from React
+   state. Entrance animations live in <FadeIn>, which needs a scroll observer. */
+
+.hover-lift {
+  transition:
+    translate 0.18s var(--ease-standard),
+    box-shadow 0.18s var(--ease-standard);
+}
+
+.hover-lift:hover {
+  --transition-color: var(--transition-hover);
+  translate: 0 -2px;
+  box-shadow: var(--shadow-md);
+  border-color: var(--neutral-400);
+}
+
+.hover-lift:active {
+  translate: 0 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.hover-accent:hover {
+  --transition-color: var(--transition-hover);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.hover-fill {
+  transition: translate 0.18s var(--ease-standard);
+}
+
+.hover-fill:hover {
+  --transition-color: var(--transition-hover);
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
+  color: var(--accent-contrast);
+  translate: 0 -2px;
+}
+
+.hover-underline {
+  text-decoration-color: transparent;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  transition: text-decoration-color var(--transition-hover);
+}
+
+.hover-underline:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Hero band ----------
+   Not a theme token: it is the single two-stop wash behind the hero, and the
+   stops are existing surface tokens. */
+
+@utility hero-wash {
+  background-image: linear-gradient(180deg, var(--surface-100) 0%, var(--surface-50) 100%);
+}
+
+/* ---------- Skills marquee ----------
+   The track holds the row twice; translating it by exactly -50% lands the
+   second copy where the first began, so the loop is seamless. */
+
+.marquee {
+  overflow: hidden;
+  /* Fades both edges so items enter and leave instead of being cut off. */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 6rem,
+    black calc(100% - 6rem),
+    transparent
+  );
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 42s linear infinite;
+}
+
+/* Row two runs the same keyframes backwards, so it travels the other way. */
+.marquee-track-reverse {
+  animation-direction: reverse;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* An endless animation is exactly what this setting is for: stop it outright
+   and let the row be scrolled by hand instead. */
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* Drops every motion to a near-instant state change rather than removing the
+   feedback entirely, per MDN's guidance on prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hover-lift:hover,
+  .hover-fill:hover {
+    translate: none;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}
+
+/* Clicks during the morph should still hit the live page, not the transition
+   overlay. */
+::view-transition {
+  pointer-events: none;
+}
+
+/* ---------- Theme toggle icon swap ---------- */
+
+.theme-icon-dark,
+:root[data-theme="dark"] .theme-icon-light {
+  display: none;
+}
+
+:root[data-theme="dark"] .theme-icon-dark {
+  display: block;
+}
+
