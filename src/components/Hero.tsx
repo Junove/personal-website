@@ -32,7 +32,7 @@ export default function Hero() {
                 Hi! I'm a DevOps Engineer in the {site.location} with a passion for security and infrastructure! It's my goal to bring secure and reliable software to as many people as possible to let builders keep doing what they do best.
               </p>
               <p className="text-sm sm:text-base leading-relaxed mt-3 max-w-[62ch] mx-auto sm:mx-0 text-fg-soft">
-                My skillset spans software engineering development, cloud infrastructure, AI technologies, and speaking publically on technical work. 
+                My skillset spans software engineering development, cloud infrastructure, AI technologies, and speaking publicly on technical work.
               </p>
 
             </FadeIn>

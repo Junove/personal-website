@@ -28,7 +28,7 @@ export default function Home() {
         <FadeIn>
           <h2 className="section-heading">Projects</h2>
           <p className="text-sm leading-relaxed mb-8 text-fg-soft">
-            Here's what I've released to the world! I'll be buliding frequently and publically, so check the site or my socials for new projects!
+            Here's what I've released to the world! I'll be building frequently and publicly, so check the site or my socials for new projects!
           </p>
           <div className="flex flex-col gap-4">
             {projects.map((p) => (
