@@ -13,11 +13,11 @@ export default function Hero() {
             <Figure
               src="/headshot.jpg"
               alt={site.name}
-              sizes="(max-width: 640px) 240px, 30vw"
+              sizes="(max-width: 640px) 176px, 30vw"
               ratio="square"
               radius="lg"
               priority
-              className="w-60 sm:w-full"
+              className="w-44 sm:w-full"
             />
           </FadeIn>
 

@@ -47,21 +47,8 @@ function useActiveSection() {
       if (el) observer.observe(el);
     }
 
-    // The page scrolls inside .scroll-area, so the browser's own scroll
-    // restoration doesn't apply and Back would leave the viewport where it was.
-    const onPopState = () => {
-      const id = location.hash.slice(1);
-      if (sectionIds.includes(id)) {
-        document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
-      } else if (!location.hash) {
-        document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "instant" });
-      }
-    };
-    window.addEventListener("popstate", onPopState);
-
     return () => {
       observer.disconnect();
-      window.removeEventListener("popstate", onPopState);
     };
   }, []);
 
@@ -70,10 +57,9 @@ function useActiveSection() {
   // section and would otherwise clobber an incoming #hash before it is scrolled to.
   const scrolled = useRef(false);
   useEffect(() => {
-    const scroller = document.querySelector(".scroll-area");
     const onScroll = () => (scrolled.current = true);
-    scroller?.addEventListener("scroll", onScroll, { passive: true, once: true });
-    return () => scroller?.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true, once: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
   useEffect(() => {
     if (scrolled.current && window.location.pathname === "/") {
@@ -86,11 +72,25 @@ function useActiveSection() {
 
 export default function Navbar() {
   const active = useActiveSection();
+  const headerRef = useRef<HTMLElement>(null);
+
+  // The nav wraps to a second row on narrow screens, so the sticky header's
+  // height varies; anchors need to clear it (see scroll-padding-top).
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const sync = () =>
+      document.documentElement.style.setProperty("--header-h", `${el.offsetHeight}px`);
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   return (
     /* Chrome sits on the raised surface, a plane above the page content, so the
        header reads as a separate bar and not as the top of the page. */
-    <header>
+    <header ref={headerRef} className="sticky top-0 z-50">
       <nav
         aria-label="Main"
         className="bg-surface-100 flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-2 min-h-16"
