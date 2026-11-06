@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { navSections, site } from "@/lib/site";
 
@@ -64,6 +64,22 @@ function useActiveSection() {
       window.removeEventListener("popstate", onPopState);
     };
   }, []);
+
+  // Keep the URL hash on the visible section so Back and reloads return to it.
+  // Gated on a real scroll: the observer's first callback reports the top
+  // section and would otherwise clobber an incoming #hash before it is scrolled to.
+  const scrolled = useRef(false);
+  useEffect(() => {
+    const scroller = document.querySelector(".scroll-area");
+    const onScroll = () => (scrolled.current = true);
+    scroller?.addEventListener("scroll", onScroll, { passive: true, once: true });
+    return () => scroller?.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => {
+    if (scrolled.current && window.location.pathname === "/") {
+      window.history.replaceState(null, "", `#${active}`);
+    }
+  }, [active]);
 
   return active;
 }
