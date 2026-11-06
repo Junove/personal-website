@@ -7,7 +7,7 @@ import Tag from "@/components/Tag";
 import { posts } from "@/lib/posts";
 
 export const metadata: Metadata = {
-  title: "Blog — Nathaniel Endick",
+  title: "Blog | Nathaniel Endick",
   description: "Writing on DevOps, security, infrastructure automation, and lessons learned.",
 };
 
@@ -18,7 +18,7 @@ export default function Blog() {
         href="/#blog"
         className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline"
       >
-        <Icon id="arrow-right" size={16} className="rotate-180" />
+        <Icon id="arrow-right" className="rotate-180" />
         Back to home
       </Link>
 

@@ -92,8 +92,6 @@ type IconProps = {
   className?: string;
 };
 
-/* aria-hidden always: icons here are decorative. The accessible name comes from
-   the parent control's text or aria-label, never from the glyph. */
 export default function Icon({ id, size = 18, className }: IconProps) {
   const { stroke, body } = registry[id];
 

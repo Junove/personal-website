@@ -7,7 +7,7 @@ import { themeInitScript } from "@/components/ThemeToggle";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Nathaniel Endick — Engineer",
+  title: "Home | Nathaniel Endick",
   description: "DevOps Engineer specializing in security, privacy, distributed infrastructure, and automation. Creating software that just works.",
 };
 

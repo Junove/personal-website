@@ -1,4 +1,9 @@
-import { skillRows } from "@/lib/site";
+"use client";
+
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { useState } from "react";
+import { skillGroups } from "@/lib/site";
+import { iconButtonClass } from "./IconButton";
 import BrandGlyph from "./BrandGlyph";
 import Icon, { type IconId } from "./icons";
 
@@ -17,35 +22,97 @@ function SkillChip({ name, slug, icon }: Skill) {
   );
 }
 
+// shortcut: 6 copies of a ~12-chip row cover ~8400px per half (about 25% zoom on 1920px); raise for wider.
+const COPIES = 6;
+
 function Row({ skills, reverse }: { skills: Skill[]; reverse?: boolean }) {
   return (
     <div className="marquee py-1.5">
-      <ul className={`marquee-track ${reverse ? "marquee-track-reverse" : ""}`}>
-        {skills.map((s) => (
-          <li key={s.name}>
-            <SkillChip {...s} />
-          </li>
-        ))}
-        {/* Second copy makes the -50% loop seamless. It is a visual duplicate,
-            so it is hidden from assistive tech. */}
-        {skills.map((s) => (
-          <li key={`${s.name}-dup`} aria-hidden>
-            <SkillChip {...s} />
-          </li>
-        ))}
+      <ul
+        // Longer track, so scale the duration (42s per copy) to keep the original speed.
+        style={{ animationDuration: `${42 * COPIES}s` }}
+        className={`marquee-track ${reverse ? "marquee-track-reverse" : ""}`}
+      >
+        {/* The track is two identical halves so the -50% loop is seamless, and each
+            half repeats the list so it stays wider than a zoomed-out viewport.
+            Every copy after the first is hidden from assistive tech. */}
+        {Array.from({ length: COPIES * 2 }, (_, i) =>
+          skills.map((s) => (
+            <li key={`${s.name}-${i}`} aria-hidden={i > 0 || undefined}>
+              <SkillChip {...s} />
+            </li>
+          )),
+        )}
       </ul>
     </div>
   );
 }
 
+const skillRows = [
+  skillGroups[0].skills,
+  [...skillGroups[1].skills, ...skillGroups[2].skills],
+];
+
 export default function TechMarquee() {
+  const [grouped, setGrouped] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const collapsed = { height: 0, opacity: 0, overflow: "hidden" };
+  const open = { height: "auto", opacity: 1 };
   return (
-    /* Negative gutters let the rows bleed to the container's edges; must track
-       Container's padding scale. */
-    <div className="space-y-2 -mx-4 sm:-mx-6 lg:-mx-10">
-      {/* Row one travels right, row two travels left. */}
-      <Row skills={skillRows[0]} reverse />
-      <Row skills={skillRows[1]} />
+    <div>
+      <button
+        type="button"
+        onClick={() => setGrouped((g) => !g)}
+        aria-pressed={grouped}
+        className={`${iconButtonClass} mb-6`}
+      >
+        Change View
+      </button>
+      <AnimatePresence mode="wait" initial={false}>
+        {grouped ? (
+          <motion.div
+            key="grouped"
+            initial={collapsed}
+            animate={open}
+            exit={collapsed}
+            transition={{
+              duration: reduceMotion ? 0 : 0.3,
+              ease: [0.2, 0, 0.2, 1],
+            }}
+          >
+            <div className="space-y-6">
+              {skillGroups.map((g) => (
+                <section key={g.title}>
+                  <h3 className="mb-3">{g.title}</h3>
+                  <ul className="flex flex-wrap gap-y-2 -mx-1">
+                    {g.skills.map((s) => (
+                      <li key={s.name}>
+                        <SkillChip {...s} />
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="marquee"
+            initial={collapsed}
+            animate={open}
+            exit={collapsed}
+            transition={{
+              duration: reduceMotion ? 0 : 0.3,
+              ease: [0.2, 0, 0.2, 1],
+            }}
+          >
+            <div className="space-y-2">
+              <Row skills={skillRows[0]} reverse />
+              <Row skills={skillRows[1]} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
