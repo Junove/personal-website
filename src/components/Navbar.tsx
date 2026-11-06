@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { navSections, site } from "@/lib/site";
@@ -44,6 +45,17 @@ function useActiveSection() {
 
 export default function Navbar() {
   const active = useActiveSection();
+  const pathname = usePathname();
+
+  // Off home, the Link navigates client-side and Next resets scroll to the top.
+  // On home, the Link would be a no-op, so scroll here. behavior "smooth" ignores
+  // the CSS scroll-behavior rule, so reduced motion is checked explicitly.
+  function onBrandClick(e: React.MouseEvent<HTMLAnchorElement>) {
+    if (pathname !== "/") return;
+    e.preventDefault();
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+  }
 
   return (
     /* Chrome sits on the raised surface, a plane above the page content, so the
@@ -57,6 +69,7 @@ export default function Navbar() {
             reach the homepage in one click than with a centered logo. */}
         <Link
           href="/"
+          onClick={onBrandClick}
           className="flex items-center gap-2 flex-shrink-0 hover-accent rounded-md"
           aria-label={`${site.name} — home`}
         >
