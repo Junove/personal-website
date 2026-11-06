@@ -5,8 +5,7 @@
 
 /* Untyped custom properties can't be interpolated, so a value swap on them is
    discrete (jumps partway through the transition) rather than smooth. Typing
-   these two lets `.hero-wash`'s gradient — the only background-image in the
-   palette, so the only thing that needs this — recompute smoothly frame by
+   these two lets `.hero-wash`'s gradient recompute smoothly frame by
    frame as the colors tween, instead of snapping once (see transition list
    below, which animates these variables themselves, not background-image). */
 @property --surface-50 {
@@ -23,9 +22,7 @@
 :root {
   --surface-50: #fbf7ee;
   --surface-100: #e2d7b8;
-  --surface-200: #e2d7b8;
-  --chrome: var(--surface-200);
-  --chrome-edge: var(--neutral-500);
+  --surface-200: #d2c7a2;
   --neutral-300: #b3a276;
   --neutral-400: #8d8255;
   --neutral-500: #6b6448;
@@ -126,12 +123,12 @@
 html {
   height: 100%;
   overscroll-behavior: none;
+  @apply bg-surface-100;
 }
 
 body {
   height: 100dvh;
   overflow: hidden;
-  background: var(--surface-100);
   color: var(--text-primary);
   @apply font-serif;
   font-weight: 500;
@@ -153,25 +150,45 @@ body {
   color: var(--text-primary);
 }
 
-/* ---------- Typography ----------
-   Declared with `@utility` rather than as bare classes so they are real
-   Tailwind utilities: they compose with variants (`sm:`, `dark:`) and sit in
-   the utilities layer with everything else. Font families come from the
-   `--font-*` theme tokens above via `@apply`, never a repeated literal. */
+/* ---------- Typography ---------- */
 
-@utility heading-1 {
-  @apply font-serif;
-  font-size: 32px;
-  line-height: 40px;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-}
+@layer base {
+  h1 {
+    @apply font-serif;
+    font-size: 32px;
+    line-height: 40px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+  }
 
-@utility heading-3 {
-  @apply font-serif;
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 600;
+  h2 {
+    @apply font-serif;
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 2rem;
+    position: relative;
+    padding-bottom: 0.75rem;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 48px;
+      height: 3px;
+      background: var(--accent-primary);
+    }
+  }
+
+  h3 {
+    @apply font-serif;
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+  }
 }
 
 @utility caption {
@@ -190,49 +207,31 @@ body {
   text-transform: uppercase;
 }
 
-@utility section-heading {
-  @apply font-serif;
-  font-size: 28px;
-  line-height: 36px;
-  font-weight: 600;
-  letter-spacing: -0.3px;
-  margin-bottom: 2rem;
-  color: var(--text-primary);
-  position: relative;
-  padding-bottom: 0.75rem;
-  display: inline-block;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 48px;
-    height: 3px;
-    background: var(--accent-primary);
-  }
-}
-
 /* ---------- Focus ---------- */
 
 :focus-visible {
-  outline: 2px solid var(--accent-primary);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline: 3px solid var(--accent-primary);
+  outline-offset: 3px;
 }
 
 /* ---------- Animation utilities ----------
    Hover/press effects are CSS: they need no JS and cannot desync from React
    state. Entrance animations live in <FadeIn>, which needs a scroll observer. */
 
+/* --transition-color is set on the base rule, not :hover, so colours fade at
+   the same speed in and out (and for inheriting children). Costs: these
+   elements switch theme in 0.15s instead of the 0.7s page fade. */
 .hover-lift {
+  --transition-color: var(--transition-hover);
   transition:
-    translate 0.18s var(--ease-standard),
-    box-shadow 0.18s var(--ease-standard);
+    translate var(--transition-hover),
+    box-shadow var(--transition-hover),
+    background-color var(--transition-hover),
+    border-color var(--transition-hover),
+    color var(--transition-hover);
 }
 
 .hover-lift:hover {
-  --transition-color: var(--transition-hover);
   translate: 0 -2px;
   box-shadow: var(--shadow-md);
   border-color: var(--neutral-400);
@@ -243,18 +242,25 @@ body {
   box-shadow: var(--shadow-sm);
 }
 
-.hover-accent:hover {
+.hover-accent {
   --transition-color: var(--transition-hover);
+}
+
+.hover-accent:hover {
   color: var(--accent-primary);
   border-color: var(--accent-primary);
 }
 
 .hover-fill {
-  transition: translate 0.18s var(--ease-standard);
+  --transition-color: var(--transition-hover);
+  transition:
+    translate var(--transition-hover),
+    background-color var(--transition-hover),
+    border-color var(--transition-hover),
+    color var(--transition-hover);
 }
 
 .hover-fill:hover {
-  --transition-color: var(--transition-hover);
   background: var(--accent-primary);
   border-color: var(--accent-primary);
   color: var(--accent-contrast);
@@ -266,7 +272,9 @@ body {
   text-decoration-line: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
-  transition: text-decoration-color var(--transition-hover);
+  transition:
+    text-decoration-color var(--transition-hover),
+    color var(--transition-hover);
 }
 
 .hover-underline:hover {
@@ -376,4 +384,5 @@ body {
 :root[data-theme="dark"] .theme-icon-dark {
   display: block;
 }
+
 

@@ -23,13 +23,13 @@ export default function Hero() {
 
           <div className="text-center sm:text-left">
             <FadeIn delay={0.20}>
-              <h1 className="heading-1 text-fg">{site.name}</h1>
+              <h1>{site.name}</h1>
               <p className="text-lg sm:text-xl font-semibold font-sans mt-1 text-accent">
                 {site.role}
               </p>
-              <p className="text-base sm:text-lg italic mt-3 text-fg-soft">I build software that "just works"</p>
+              <p className="text-base sm:text-lg italic mt-3 text-fg-soft">I build software that &quot;just works&quot;</p>
               <p className="text-sm sm:text-base leading-relaxed mt-4 max-w-[62ch] mx-auto sm:mx-0 text-fg-soft">
-                Hi! I'm a DevOps Engineer in the {site.location} with a passion for security and infrastructure! It's my goal to bring secure and reliable software to as many people as possible to let builders keep doing what they do best.
+                Hi! I&apos;m a DevOps Engineer in the {site.location} with a passion for security and infrastructure! It&apos;s my goal to bring secure and reliable software to as many people as possible to let builders keep doing what they do best.
               </p>
               <p className="text-sm sm:text-base leading-relaxed mt-3 max-w-[62ch] mx-auto sm:mx-0 text-fg-soft">
                 My skillset spans software engineering development, cloud infrastructure, AI technologies, and speaking publicly on technical work.

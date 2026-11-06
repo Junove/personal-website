@@ -22,7 +22,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         Back to all posts
       </Link>
       <p className="caption mb-2 text-fg-muted">Published · {post.date}</p>
-      <h1 className="heading-1 mb-6 text-fg">
+      <h1 className="mb-6">
         {post.title}
       </h1>
       <p className="text-lg leading-relaxed text-fg-soft">{post.body}</p>

@@ -51,7 +51,7 @@ export default function Navbar() {
     <header>
       <nav
         aria-label="Main"
-        className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-2 min-h-16"
+        className="bg-surface-100 flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-2 min-h-16"
       >
         {/* Left-aligned and linking home: NN/G found users are far likelier to
             reach the homepage in one click than with a centered logo. */}
@@ -76,7 +76,7 @@ export default function Navbar() {
             const isActive = id === active;
 
             return (
-              <a
+              <Link
                 key={id}
                 href={`/#${id}`}
                 aria-current={isActive ? "true" : undefined}
@@ -92,7 +92,7 @@ export default function Navbar() {
                 {isActive && (
                   <span aria-hidden className="absolute inset-x-2.5 -bottom-px h-0.5 bg-accent" />
                 )}
-              </a>
+              </Link>
             );
           })}
         </div>

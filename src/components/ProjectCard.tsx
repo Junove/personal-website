@@ -44,14 +44,14 @@ export default function ProjectCard({ project }: { project: Project }) {
         </ViewTransition>
 
         <div className="flex-1 min-w-0 p-5">
-          <h3 className="heading-3 text-fg flex items-center gap-2">
+          <h3 className="flex items-center gap-2">
             <Link href={`/projects/${slug}`} className="after:absolute after:inset-0">
               {title}
             </Link>
             <Icon
               id="arrow-right"
               size={16}
-              className="opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 text-accent"
+              className="opacity-0 -translate-x-1 transition-all duration-150 group-hover:opacity-100 group-hover:translate-x-0 text-accent"
             />
           </h3>
           <p className="text-sm leading-relaxed mt-2 mb-4 text-fg-soft">{desc}</p>
