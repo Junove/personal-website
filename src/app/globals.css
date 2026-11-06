@@ -305,6 +305,9 @@ body {
 
 .marquee {
   overflow: hidden;
+  /* Caps the visible width so the track never needs more than a few copies. */
+  max-width: 150rem;
+  margin-right: auto;
   /* Fades both edges so items enter and leave instead of being cut off. */
   mask-image: linear-gradient(
     to right,

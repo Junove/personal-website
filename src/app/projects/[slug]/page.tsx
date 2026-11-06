@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import IconLink from "@/components/IconButton";
@@ -41,30 +40,13 @@ export default async function ProjectPage({
 
   return (
     <Section width="page">
-      {/* <Link>, not <a>: a client navigation lets the shared-element
-          ViewTransition morph the card back in. */}
       <Link
         href="/#projects"
-        className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline">
-        <Icon id="arrow-right" size={16} className="rotate-180" />
+        className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline"
+      >
+        <Icon id="arrow-right" className="rotate-180" />
         Back to projects
       </Link>
-
-      <div className="grid grid-cols-1 sm:grid-cols-[30%_1fr] gap-8 sm:gap-12 items-start">
-        <ViewTransition name={`project-${slug}`}>
-          {project.image ? (
-            <Figure
-              src={project.image}
-              alt={project.title}
-              sizes="(max-width: 640px) 100vw, 30vw"
-              ratio="landscape"
-              radius="lg"
-              border="lg"
-            />
-          ) : (
-            <FigureFallback icon="code" ratio="landscape" />
-          )}
-        </ViewTransition>
 
       {/* Same card treatment as ProjectCard: shared media panel, accent bar, radius. */}
       <ViewTransition name={`project-${slug}`}>

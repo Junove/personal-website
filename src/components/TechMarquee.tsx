@@ -22,8 +22,8 @@ function SkillChip({ name, slug, icon }: Skill) {
   );
 }
 
-// shortcut: 6 copies of a ~12-chip row cover ~8400px per half (about 25% zoom on 1920px); raise for wider.
-const COPIES = 6;
+// shortcut: 2 copies of a ~12-chip row cover ~2800px per half, enough for the 100rem cap in .marquee at any zoom; raise if the cap grows.
+const COPIES = 2;
 
 function Row({ skills, reverse }: { skills: Skill[]; reverse?: boolean }) {
   return (
