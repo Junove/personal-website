@@ -3,6 +3,7 @@ import { ViewTransition } from "react";
 import { notFound } from "next/navigation";
 import IconLink from "@/components/IconButton";
 import Icon from "@/components/icons";
+import BackLink from "@/components/BackLink";
 import Section from "@/components/Section";
 import Tag from "@/components/Tag";
 import Figure, { FigureFallback } from "@/components/Figure";
@@ -34,15 +35,10 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <Section width="page">
-      {/* Plain <a>, not <Link>: a hash into the single page, same as the nav. */}
-      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-      <a
-        href="/#projects"
-        className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline"
-      >
+      <BackLink className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline">
         <Icon id="arrow-right" size={16} className="rotate-180" />
         Back to projects
-      </a>
+      </BackLink>
 
       <div className="grid grid-cols-1 sm:grid-cols-[30%_1fr] gap-8 sm:gap-12 items-start">
         <ViewTransition name={`project-${slug}`}>
