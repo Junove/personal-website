@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ViewTransition } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import IconLink from "@/components/IconButton";
 import Icon from "@/components/icons";
@@ -34,15 +35,14 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   return (
     <Section width="page">
-      {/* Plain <a>, not <Link>: a hash into the single page, same as the nav. */}
-      {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-      <a
+      {/* <Link>, not <a>: a client navigation lets the shared-element
+          ViewTransition morph the card back in. */}
+      <Link
         href="/#projects"
-        className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline"
-      >
+        className="flex w-fit items-center gap-1.5 text-sm font-semibold font-sans mb-6 text-accent hover-underline">
         <Icon id="arrow-right" size={16} className="rotate-180" />
         Back to projects
-      </a>
+      </Link>
 
       <div className="grid grid-cols-1 sm:grid-cols-[30%_1fr] gap-8 sm:gap-12 items-start">
         <ViewTransition name={`project-${slug}`}>
