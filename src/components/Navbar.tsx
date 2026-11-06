@@ -54,7 +54,8 @@ export default function Navbar() {
     if (pathname !== "/") return;
     e.preventDefault();
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    // The page scrolls inside .scroll-area (body is overflow:hidden), not the window.
+    document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   }
 
   return (
