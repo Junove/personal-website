@@ -119,14 +119,15 @@
 }
 
 html {
-  height: 100%;
-  overscroll-behavior: none;
   @apply bg-surface-100;
+  /* The in-page nav jumps smoothly; --header-h is set by Navbar so anchors
+     land below the sticky header. */
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h, 4rem);
 }
 
 body {
-  height: 100dvh;
-  overflow: hidden;
+  min-height: 100dvh;
   color: var(--text-primary);
   @apply font-serif;
   font-weight: 500;
@@ -134,14 +135,6 @@ body {
   line-height: 24px;
 }
 
-.scroll-area {
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  /* The in-page nav jumps within this container, not the window. */
-  scroll-behavior: smooth;
-}
 
 ::selection {
   background: var(--accent-light);
@@ -186,6 +179,26 @@ body {
     font-size: 24px;
     line-height: 32px;
     font-weight: 600;
+  }
+
+  /* Below Tailwind's `sm` (640px): step headings down so they don't wrap
+     awkwardly or dominate a ~360px screen. */
+  @media (max-width: 639px) {
+    h1 {
+      font-size: 28px;
+      line-height: 36px;
+    }
+
+    h2 {
+      font-size: 24px;
+      line-height: 32px;
+      margin-bottom: 1.5rem;
+    }
+
+    h3 {
+      font-size: 20px;
+      line-height: 28px;
+    }
   }
 }
 

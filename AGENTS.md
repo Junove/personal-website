@@ -1,19 +1,15 @@
+## General conventions
+
+- **Layout of `src/`:** routes in `src/app/` (`blog/[slug]`, `projects/[slug]`), reusable UI in `src/components/` (one default-exported component per file, PascalCase filename), content and site data in `src/lib/`.
+- **Content is data:** identity, nav sections and social links live in `src/lib/site.ts`; posts and projects in `src/lib/posts.ts` / `src/lib/projects.ts`. Edit those rather than hard-coding copy in components.
+- **Reuse before adding:** page structure is built from `Container`, `Section`, `Card`/`CardLink`, `Tag`, `Divider`, `FadeIn`, etc. Check `src/components/` for an existing piece before writing a new one, and match its prop style (typed `Props`, optional booleans with defaults, `className` passthrough).
+- **Styling:** use Tailwind utilities with the existing token-backed classes (`bg-surface-50`, `border-neutral-300`, `bg-accent`, …), not raw hex/rgb values or inline styles.
+- **Comments:** short, and only for the *why* (e.g. the `copyrightYear` literal in `site.ts`). Doc comments (`/** */`) on props and exported helpers where intent isn't obvious.
+- **Commits:** Conventional Commits, enforced by commitlint (`feat:`, `fix:`, …). Work on a feature branch and open a PR against `main`.
+
 ## Color usage
 
-This site's palette lives in `src/app/globals.css` as CSS custom properties, with light values in `:root` and dark overrides in `:root[data-theme="dark"]`. Before adding or changing any color usage (new component, new palette, new variable), check actual contrast, not just hue intent:
+**Avoid touching the theming in `src/app/globals.css` (the palette tokens, `:root`, and `:root[data-theme="dark"]` blocks) as much as possible.** It is carefully tuned for contrast in both themes. Prefer using existing tokens in components; only change the theme when it's genuinely required, keep the edit minimal, and follow the checks below.
 
-- Grep for every existing usage of a variable before reusing it (e.g. `grep -rn "accent-light" src/`) — a token's name doesn't guarantee how it's used elsewhere. `accent-light` in this codebase is always a pale/dark *background tint* paired with `accent-primary` or `text-primary` text (active nav tab, blog badges, card hover, text selection) — it must stay light enough (light theme) or dark enough (dark theme) for that foreground text to read clearly, regardless of what hue or lightness a new design system assigns the same name.
 - When adopting colors from an external design system/brand, don't copy token values verbatim if the token's *semantic role* there doesn't match how this codebase actually uses the equally-named variable here. Re-derive the value to satisfy this codebase's real usage instead.
 - Check text/background pairs reach roughly 4.5:1 contrast (3:1 for large text/borders). A quick manual sRGB relative-luminance check is fine if no tool is available.
-- `Navbar`/`Footer` sit on `--chrome`, with a `--chrome-edge` border. Both are per-theme aliases of existing tokens, not new colors: in light `--chrome` is `--surface-200` (darker than the page) with a `--neutral-500` edge; in dark it is `--surface-50` (lighter than the page) with a `--neutral-400` edge. The chrome moves *away* from the page surface in opposite directions per theme, which is deliberate — don't collapse it back to one token for both. They originally shared the page surface and relied on the border alone; that was dropped because the header was the same color as the page. Keep the chrome off any surface the page bands use, keep the edge at 3:1 against it, and re-check both themes visually before changing either.
-- Dark mode is not an inverted light mode: its surfaces are near-neutral with only a green hint, spread over a wide tonal range (`--surface-200` L* ≈ 3, `--surface-100` L* ≈ 11, `--surface-50` L* ≈ 21) so the three planes separate and the olive accent carries the brand. Don't flatten them back toward one olive.
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-## This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->

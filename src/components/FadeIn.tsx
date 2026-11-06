@@ -17,23 +17,20 @@ type FadeInProps = {
 /* One listener for every FadeIn, because the reveal is directional: it should
    play only while the reader is moving down the page. Scrolling back up brings
    elements in from the top edge, and animating those replays the whole page in
-   reverse. The scroller is `div.scroll-area`, not the window — body is
-   `100dvh; overflow: hidden` (see globals.css and layout.tsx). */
+   reverse. */
 let goingDown = true;
 let lastTop = 0;
 let listening = false;
 
 function watchScrollDirection() {
   if (listening) return;
-  const el = document.querySelector(".scroll-area");
-  if (!el) return;
   listening = true;
-  lastTop = el.scrollTop;
-  el.addEventListener(
+  lastTop = window.scrollY;
+  window.addEventListener(
     "scroll",
     () => {
-      if (el.scrollTop !== lastTop) goingDown = el.scrollTop > lastTop;
-      lastTop = el.scrollTop;
+      if (window.scrollY !== lastTop) goingDown = window.scrollY > lastTop;
+      lastTop = window.scrollY;
     },
     { passive: true },
   );
@@ -47,12 +44,6 @@ function watchScrollDirection() {
  * next downward pass. `animate` is driven from `useInView` rather than
  * `whileInView` because `whileInView` reuses one transition in both directions.
  * `once: true` keeps elements revealed after first trigger — avoids flicker at the threshold boundary.
- *
- * Non-window scroller gotcha: with no `root` option `useInView` passes
- * `root: undefined` (node_modules/framer-motion/dist/es/utils/use-in-view.mjs),
- * so the IntersectionObserver roots on the browser viewport — and content
- * inside `.scroll-area` keeps moving relative to the browser viewport as that
- * div scrolls, so entries fire normally.
  *
  * Why this doesn't strand text at opacity 0 the way an earlier attempt did:
  * - `amount: 0.15` is a visible-ratio threshold, never a negative root margin.

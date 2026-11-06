@@ -23,7 +23,7 @@ export default function Blog() {
       </Link>
 
       <h2>Blog</h2>
-      <p className="text-lg leading-relaxed mb-10 max-w-[62ch] text-fg-soft">
+      <p className="text-base sm:text-lg leading-relaxed mb-10 max-w-[62ch] text-fg-soft">
         Sharing what I learn about security, automation, and infrastructure — written for
         engineers who want practical takeaways, not theory.
       </p>

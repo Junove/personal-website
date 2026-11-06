@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="en" className="antialiased" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className="flex flex-col">
         <Script id="theme-init" strategy="beforeInteractive">
           {themeInitScript}
@@ -22,10 +22,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <style>{`[data-fade]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
         <Navbar />
-        <div className="scroll-area flex-1 min-h-0 flex flex-col">
-          <main id="main" className="flex-1">{children}</main>
-          <Footer />
-        </div>
+        <main id="main" className="flex-1">{children}</main>
+        <Footer />
         <Analytics />
       </body>
     </html>

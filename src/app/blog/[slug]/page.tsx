@@ -25,7 +25,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
       <h1 className="mb-6">
         {post.title}
       </h1>
-      <p className="text-lg leading-relaxed text-fg-soft">{post.body}</p>
+      <p className="text-base sm:text-lg leading-relaxed text-fg-soft">{post.body}</p>
     </div>
   );
 }
