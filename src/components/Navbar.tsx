@@ -17,6 +17,7 @@ function useActiveSection() {
 
   useEffect(() => {
     const seen = new Map<string, boolean>();
+    let last = sectionIds[0];
 
     // Subscribing to an external system, so setState in the callback is the
     // intended pattern here rather than a cascading render.
@@ -24,7 +25,17 @@ function useActiveSection() {
       (entries) => {
         for (const entry of entries) seen.set(entry.target.id, entry.isIntersecting);
         const first = sectionIds.find((id) => seen.get(id));
-        if (first) setActive(first);
+        if (!first) return;
+        setActive(first);
+        // One history entry per section change, so Back returns to the section
+        // you left. The hash check stops a Back/Forward traversal (already on
+        // that hash) from pushing a duplicate entry; the top of the page stays
+        // hash-less so returning to it doesn't truncate forward history.
+        const atTop = first === sectionIds[0] && !location.hash;
+        if (first !== last && !atTop && location.hash !== `#${first}`) {
+          window.history.pushState(null, "", `#${first}`);
+        }
+        last = first;
       },
       // Band across the upper-middle of the viewport: the section crossing it
       // is the one the visitor is actually reading.
@@ -36,7 +47,22 @@ function useActiveSection() {
       if (el) observer.observe(el);
     }
 
-    return () => observer.disconnect();
+    // The page scrolls inside .scroll-area, so the browser's own scroll
+    // restoration doesn't apply and Back would leave the viewport where it was.
+    const onPopState = () => {
+      const id = location.hash.slice(1);
+      if (sectionIds.includes(id)) {
+        document.getElementById(id)?.scrollIntoView({ behavior: "instant" });
+      } else if (!location.hash) {
+        document.querySelector(".scroll-area")?.scrollTo({ top: 0, behavior: "instant" });
+      }
+    };
+    window.addEventListener("popstate", onPopState);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("popstate", onPopState);
+    };
   }, []);
 
   // Keep the URL hash on the visible section so Back and reloads return to it.
@@ -67,7 +93,7 @@ export default function Navbar() {
     <header>
       <nav
         aria-label="Main"
-        className="flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-2 min-h-16"
+        className="bg-surface-100 flex items-center gap-2 sm:gap-4 px-4 sm:px-6 py-2 min-h-16"
       >
         {/* Left-aligned and linking home: NN/G found users are far likelier to
             reach the homepage in one click than with a centered logo. */}
@@ -92,7 +118,7 @@ export default function Navbar() {
             const isActive = id === active;
 
             return (
-              <a
+              <Link
                 key={id}
                 href={`/#${id}`}
                 aria-current={isActive ? "true" : undefined}
@@ -108,7 +134,7 @@ export default function Navbar() {
                 {isActive && (
                   <span aria-hidden className="absolute inset-x-2.5 -bottom-px h-0.5 bg-accent" />
                 )}
-              </a>
+              </Link>
             );
           })}
         </div>

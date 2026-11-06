@@ -10,7 +10,7 @@ type CardProps = {
 };
 
 const base =
-  "relative overflow-hidden rounded-lg bg-surface-50 border border-neutral-300 shadow-sm";
+  "relative overflow-hidden rounded-lg bg-surface-50 border-2 border-neutral-300 shadow-sm";
 
 export default function Card({
   children,

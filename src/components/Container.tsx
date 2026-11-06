@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 
 const widths = {
-  page: "max-w-[90%]",
-  // ~65ch: the readable measure for long-form prose.
+  page: "max-w-[95%]",
   prose: "max-w-[65ch]",
 };
 

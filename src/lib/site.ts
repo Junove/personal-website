@@ -27,7 +27,6 @@ export const navSections = [
   // doesn't link to a missing anchor. Re-add alongside the Section below.
 ];
 
-/** Icon-button links, used in both the hero and the footer. */
 export const socialLinks: { label: string; href: string; icon: IconId }[] = [
   { label: "GitHub", href: site.github, icon: "github" },
   { label: "LinkedIn", href: site.linkedin, icon: "linkedin" },
@@ -42,8 +41,8 @@ export const socialLinks: { label: string; href: string; icon: IconId }[] = [
  *
  * Every slug here was verified to resolve against cdn.simpleicons.org.
  */
-export const skillRows: { name: string; slug?: string; icon?: IconId }[][] = [
-  [
+export const skillGroups: { title: string; skills: { name: string; slug?: string; icon?: IconId }[] }[] = [
+  { title: "Cloud Tooling", skills: [
     { name: "Kubernetes", slug: "kubernetes" },
     { name: "Docker", slug: "docker" },
     { name: "AWS", icon: "aws" },
@@ -55,19 +54,29 @@ export const skillRows: { name: string; slug?: string; icon?: IconId }[][] = [
     { name: "Dynatrace", slug: "dynatrace" },
     { name: "Splunk", slug: "splunk" },
     { name: "Opsgenie", slug: "opsgenie" },
-  ],
-  [
+    { name: "Vercel", slug: "vercel" }
+  ] },
+  { title: "Programming Languages", skills: [
     { name: "Python", slug: "python" },
     { name: "Java", slug: "openjdk" },
     { name: "Groovy", slug: "apachegroovy" },
+    { name: "TypeScript", slug: "typescript" },
     { name: "Shell", slug: "gnubash" },
     { name: "MySQL", slug: "mysql" },
+    { name: "Apps Script", slug: "googleappsscript" },
+  ] },
+  { title: "AI Tooling", skills: [
+    { name: "Claude Code", slug: "claudecode" },
+    { name: "OpenCode", slug: "opencode" },
+    { name: "Hugging Face", slug: "huggingface" }
+  ] },
+  { title: "Frameworks", skills: [
     { name: "Spring Boot", slug: "springboot" },
+    { name: "Next.js", slug: "nextdotjs" },
     { name: "React", slug: "react" },
+    { name: "Tailwind CSS", slug: "tailwindcss" },
     { name: "Angular", slug: "angular" },
     { name: "Flutter", slug: "flutter" },
     { name: "JUnit", slug: "junit5" },
-    { name: "Hugging Face", slug: "huggingface" },
-    { name: "Apps Script", slug: "googleappsscript" },
-  ],
+  ] },
 ];

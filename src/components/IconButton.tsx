@@ -14,7 +14,6 @@ export const iconButtonClass = `${iconButtonBase} gap-1.5 h-9 px-3 font-sans tex
 
 type IconLinkProps = {
   href: string;
-  /** Rendered as visible text, which is also the accessible name. */
   label: string;
   children: ReactNode;
 };

@@ -12,9 +12,6 @@ export const themeInitScript = `
 })();
 `;
 
-/* Theme lives in a data attribute on <html>, not React state: the init script
-   sets it before first paint and CSS does the icon swap, so there is nothing to
-   hydrate and no flash. */
 export default function ThemeToggle() {
   function toggleTheme() {
     const next = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
