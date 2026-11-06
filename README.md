@@ -1,10 +1,16 @@
 # personal-website
+![version](https://img.shields.io/github/package-json/v/Junove/personal-website)
 
-Personal site of Nathaniel Endick (DevOps engineer): a landing page, blog, and projects section.
+My personal corner of the internet.
 
-**Stack:** Next.js 16 (App Router, Cache Components), React 19, Tailwind CSS 4, Motion, Vercel Analytics, TypeScript.
+## Tech Stack
 
-## Commands
+- ![Next.js](https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white)
+- ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white)
+- ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?logo=tailwindcss&logoColor=white)
+- ![Vercel](https://img.shields.io/badge/Vercel-000000?logo=vercel&logoColor=white)
+
+## Build Commands
 
 ```bash
 npm install      # install dependencies
@@ -13,17 +19,3 @@ npm run build    # production build
 npm run start    # serve the production build
 npm run lint     # ESLint
 ```
-
-Commits are checked by [pre-commit](https://pre-commit.com) (ESLint and commitlint with conventional commits); run `pre-commit install --hook-type pre-commit --hook-type commit-msg` once after cloning.
-
-## Deploy
-
-Deployed on Vercel. Pushes to `main` deploy to production and pull requests get preview deployments.
-
-## Environment variables
-
-None required.
-
-## Design notes
-
-Color palette rules are in [AGENTS.md](AGENTS.md).
