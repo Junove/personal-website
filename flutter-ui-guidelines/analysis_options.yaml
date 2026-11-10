@@ -1,0 +1,111 @@
+# Starting point for the Flutter repo. Built-in lints only; names are from the Dart linter.
+# Run `dart analyze` once after copying: remove any rule your SDK version no longer ships.
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true
+    strict-raw-types: true
+  errors:
+    # Promote guideline violations so CI fails on them.
+    prefer_const_constructors: error
+    use_key_in_widget_constructors: error
+    use_build_context_synchronously: error
+    avoid_print: error
+    always_use_package_imports: error
+    depend_on_referenced_packages: error
+    missing_required_param: error
+    invalid_annotation_target: ignore
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "lib/l10n/**"
+
+linter:
+  rules:
+    # --- Widget construction ---
+    - prefer_const_constructors
+    - prefer_const_constructors_in_immutables
+    - prefer_const_literals_to_create_immutables
+    - prefer_const_declarations
+    - use_key_in_widget_constructors
+    - use_super_parameters
+    - sort_child_properties_last         # child/children last in widget calls
+    - avoid_unnecessary_containers
+    - sized_box_for_whitespace
+    - sized_box_shrink_expand
+    - use_colored_box                    # ColoredBox instead of Container(color:)
+    - use_decorated_box                  # DecoratedBox instead of Container(decoration:)
+    - library_private_types_in_public_api
+    - no_logic_in_create_state
+    - avoid_positional_boolean_parameters
+    - avoid_field_initializers_in_const_classes
+    - prefer_final_fields
+    - prefer_final_locals
+    - unnecessary_late
+    - avoid_unused_constructor_parameters
+    - use_named_constants
+
+    # --- Async and context safety ---
+    - use_build_context_synchronously
+    - unawaited_futures
+    - cancel_subscriptions
+    - close_sinks
+
+    # --- Structure and imports ---
+    - always_use_package_imports
+    - directives_ordering
+    - depend_on_referenced_packages
+    - avoid_relative_lib_imports
+    - file_names                         # snake_case filenames
+
+    # --- Types and safety ---
+    - always_declare_return_types
+    - avoid_dynamic_calls
+    - avoid_catches_without_on_clauses
+    - avoid_returning_null_for_future
+    - avoid_redundant_argument_values
+    - prefer_typing_uninitialized_variables
+    - annotate_overrides
+    - omit_obvious_local_variable_types
+
+    # --- Style and docs ---
+    - prefer_single_quotes
+    - require_trailing_commas
+    - flutter_style_todos
+    - avoid_print
+    - public_member_api_docs             # drop this if too noisy for app code
+
+# ---------------------------------------------------------------------------
+# Rules the built-in analyzer cannot express. Enable via DCM (dcm.dev) or write
+# them with custom_lint. Names below are DCM's; verify against the version you install.
+#
+# dart_code_metrics / dcm:
+#   rules:
+#     - avoid-returning-widgets            # no _buildFoo() helpers; use widget classes
+#     - avoid-nested-conditional-expressions
+#     - avoid-banned-imports:              # enforce layer boundaries
+#         entries:
+#           - paths: ['lib/data/.*', 'lib/domain/.*']
+#             deny: ['package:flutter/(material|widgets|cupertino).dart']
+#           - paths: ['lib/features/(.*)/.*']
+#             deny: ['package:app/features/(?!\1/).*/presentation/.*']   # no cross-feature UI imports
+#     - prefer-extracting-callbacks
+#     - prefer-single-widget-per-file
+#     - always-remove-listener
+#     - dispose-fields
+#     - avoid-unnecessary-setstate
+#     - avoid-border-all                   # perf: prefer Border.fromBorderSide / const
+#     - prefer-correct-edge-insets-constructor
+#     - prefer-const-border-radius
+#     - prefer-sized-box-square
+#     - avoid-expanded-as-spacer
+#     - prefer-center-over-align
+#     - member-ordering
+#
+# Custom (no off-the-shelf rule; write with custom_lint, or a CI grep):
+#     - no Color(0x...) / Colors.xxx / TextStyle(fontSize:) outside lib/core/theme
+#     - no string literals in Text(...) outside lib/l10n
+#     - IconButton must set tooltip
+# ---------------------------------------------------------------------------
