@@ -12,6 +12,8 @@ export const site = {
   // A literal, not new Date(): Next 16 rejects unstable values during
   // prerender, so the year has to be bumped here by hand.
   copyrightYear: 2026,
+  /** Canonical origin, no trailing slash. Used for RSS and email links. */
+  url: (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
 };
 
 /**
