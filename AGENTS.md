@@ -13,3 +13,13 @@
 
 - When adopting colors from an external design system/brand, don't copy token values verbatim if the token's *semantic role* there doesn't match how this codebase actually uses the equally-named variable here. Re-derive the value to satisfy this codebase's real usage instead.
 - Check text/background pairs reach roughly 4.5:1 contrast (3:1 for large text/borders). A quick manual sRGB relative-luminance check is fine if no tool is available.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+## This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

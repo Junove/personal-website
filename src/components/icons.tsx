@@ -8,7 +8,11 @@ export type IconId =
   | "arrow-right"
   | "sun"
   | "moon"
-  | "code";
+  | "code"
+  | "layers"
+  | "spark"
+  | "tag"
+  | "rss";
 
 /**
  * One glyph registry, one component. `stroke: true` marks the line-drawn icons,
@@ -80,6 +84,41 @@ const registry: Record<IconId, { stroke?: boolean; body: ReactNode }> = {
       <>
         <polyline points="16 18 22 12 16 6" />
         <polyline points="8 6 2 12 8 18" />
+      </>
+    ),
+  },
+  layers: {
+    stroke: true,
+    body: (
+      <>
+        <polygon points="12 2 2 7 12 12 22 7 12 2" />
+        <polyline points="2 17 12 22 22 17" />
+        <polyline points="2 12 12 17 22 12" />
+      </>
+    ),
+  },
+  spark: {
+    stroke: true,
+    body: (
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8" />
+    ),
+  },
+  tag: {
+    stroke: true,
+    body: (
+      <>
+        <path d="M20.59 13.41 13.42 20.59a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82Z" />
+        <line x1="7" y1="7" x2="7.01" y2="7" />
+      </>
+    ),
+  },
+  rss: {
+    stroke: true,
+    body: (
+      <>
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
       </>
     ),
   },

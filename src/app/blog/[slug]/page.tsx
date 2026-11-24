@@ -1,15 +1,25 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MDXRemote } from "next-mdx-remote/rsc";
 import Icon from "@/components/icons";
-import { posts, getPost } from "@/lib/posts";
+import mdxComponents from "@/components/MdxComponents";
+import SubscribeForm from "@/components/SubscribeForm";
+import { formatDate, getPost, getPosts } from "@/lib/posts";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const posts = await getPosts();
   return posts.map((post) => ({ slug: post.slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const post = await getPost((await params).slug);
+  return post ? { title: `${post.title} | Nathaniel Endick`, description: post.excerpt } : {};
 }
 
 export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = getPost(slug);
+  const post = await getPost(slug);
   if (!post) notFound();
 
   return (
@@ -21,11 +31,10 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         <Icon id="arrow-right" className="rotate-180" />
         Back to all posts
       </Link>
-      <p className="caption mb-2 text-fg-muted">Published · {post.date}</p>
-      <h1 className="mb-6">
-        {post.title}
-      </h1>
-      <p className="text-base sm:text-lg leading-relaxed text-fg-soft">{post.body}</p>
+      <p className="font-mono text-xs mb-2 text-fg-muted">{formatDate(post.date)}</p>
+      <h1 className="mb-6">{post.title}</h1>
+      <MDXRemote source={post.body} components={mdxComponents} />
+      <SubscribeForm className="mt-12" />
     </div>
   );
 }

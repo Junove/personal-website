@@ -3,22 +3,6 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&display=swap');
 @import "tailwindcss";
 
-/* Untyped custom properties can't be interpolated, so a value swap on them is
-   discrete (jumps partway through the transition) rather than smooth. Typing
-   these two lets `.hero-wash`'s gradient recompute smoothly frame by
-   frame as the colors tween, instead of snapping once (see transition list
-   below, which animates these variables themselves, not background-image). */
-@property --surface-50 {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #fbf7ee;
-}
-@property --surface-100 {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #e2d7b8;
-}
-
 :root {
   --surface-50: #fbf7ee;
   --surface-100: #e2d7b8;
@@ -119,7 +103,7 @@
 }
 
 html {
-  @apply bg-surface-100;
+  background-color: var(--surface-100);
   /* The in-page nav jumps smoothly; --header-h is set by Navbar so anchors
      land below the sticky header. */
   scroll-behavior: smooth;
@@ -245,12 +229,27 @@ body {
 .hover-lift:hover {
   translate: 0 -2px;
   box-shadow: var(--shadow-md);
-  border-color: var(--neutral-400);
 }
 
 .hover-lift:active {
   translate: 0 0;
   box-shadow: var(--shadow-sm);
+}
+
+/* Plain classes, not Tailwind transition-* utilities: the unlayered `*` rule
+   above outranks utilities, so they would silently never apply. */
+.expand-seg {
+  --transition-color: 0.5s var(--ease-standard);
+  transition:
+    flex-grow 0.5s var(--ease-standard),
+    background-color 0.5s var(--ease-standard),
+    color 0.5s var(--ease-standard);
+}
+
+.expand-label {
+  transition:
+    max-width 0.5s var(--ease-standard),
+    opacity 0.5s var(--ease-standard);
 }
 
 .hover-accent {
@@ -292,25 +291,6 @@ body {
   text-decoration-color: currentColor;
 }
 
-/* ---------- Hero band ----------
-   Not a theme token: it is the single two-stop wash behind the hero, and the
-   stops are existing surface tokens. */
-
-@utility hero-wash {
-  background-image: linear-gradient(180deg, var(--surface-100) 0%, var(--surface-50) 100%);
-}
-
-.hero-wash {
-  /* Only this element transitions the typed surface vars. On `*` every element
-     re-tweened the value its parent was already tweening, so the theme fade
-     compounded and lagged. */
-  transition:
-    --surface-50 var(--transition-color),
-    --surface-100 var(--transition-color),
-    background-color var(--transition-color),
-    border-color var(--transition-color),
-    color var(--transition-color);
-}
 
 /* ---------- Skills marquee ----------
    The track holds the row twice; translating it by exactly -50% lands the
