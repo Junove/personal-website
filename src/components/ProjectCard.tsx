@@ -1,6 +1,6 @@
 import { ViewTransition } from "react";
 import Link from "next/link";
-import Tag from "./Tag";
+import TagList from "./TagList";
 import Card from "./Card";
 import IconLink from "./IconButton";
 import Icon from "./icons";
@@ -9,9 +9,6 @@ import type { Project } from "@/lib/projects";
 
 export default function ProjectCard({ project }: { project: Project }) {
   const { slug, title, desc, tags, link } = project;
-  // Mobile shows 3 tags plus a "+N" badge instead of wrapping every tag.
-  const visibleTags = tags.slice(0, 3);
-  const overflowTags = tags.slice(3);
 
   return (
     /* Two destinations now (detail page + repo), so the card can't be one <a>:
@@ -46,36 +43,19 @@ export default function ProjectCard({ project }: { project: Project }) {
             </p>
 
             <p className="label text-fg-muted mb-2">Built with</p>
-            {/* Full labels, always visible. The previous version showed a 2-letter
-                abbreviation and revealed the name on :hover, which left the text
-                unreachable on touch and keyboard. */}
-            <ul className="flex flex-wrap items-center gap-2">
-              {visibleTags.map((tag) => (
-                <li key={tag.name}>
-                  <Tag label={tag.name} slug={tag.slug} />
-                </li>
-              ))}
-              {overflowTags.map((tag) => (
-                <li key={tag.name} className="hidden sm:list-item">
-                  <Tag label={tag.name} slug={tag.slug} />
-                </li>
-              ))}
-              {overflowTags.length > 0 && (
-                <li className="sm:hidden">
-                  <Tag label={`+${overflowTags.length}`} />
-                </li>
-              )}
-            </ul>
+            <TagList tags={tags} />
 
             {/* `w-fit`: a full-width wrapper would raise a whole strip of the card
                 above the stretched title link and swallow clicks there.
                 shortcut: every card's pill is named just "GitHub", ambiguous if a
                 second project lands; needs an optional aria-label on IconLink. */}
-            <div className="relative z-10 mt-5 w-fit">
-              <IconLink href={link} label="GitHub">
-                <Icon id="github" />
-              </IconLink>
-            </div>
+            {link && (
+              <div className="relative z-10 mt-5 w-fit">
+                <IconLink href={link} label="GitHub">
+                  <Icon id="github" />
+                </IconLink>
+              </div>
+            )}
           </div>
         </div>
       </Card>

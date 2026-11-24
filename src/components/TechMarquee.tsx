@@ -1,15 +1,12 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useState } from "react";
 import { skillGroups } from "@/lib/site";
-import { iconButtonClass } from "./IconButton";
 import BrandGlyph from "./BrandGlyph";
 import Icon, { type IconId } from "./icons";
 
-type Skill = { name: string; slug?: string; icon?: IconId };
+export type Skill = { name: string; slug?: string; icon?: IconId };
 
-function SkillChip({ name, slug, icon }: Skill) {
+export function SkillChip({ name, slug, icon }: Skill) {
   return (
     <span className="inline-flex items-center gap-1.5 px-3 py-2 mx-1 rounded-lg bg-surface-50 border border-neutral-300 shadow-sm whitespace-nowrap text-fg-soft hover-accent sm:gap-2 sm:px-4 sm:py-2.5 sm:mx-1.5">
       {icon ? (
@@ -54,65 +51,10 @@ const skillRows = [
 ];
 
 export default function TechMarquee() {
-  const [grouped, setGrouped] = useState(false);
-  const reduceMotion = useReducedMotion();
-  const collapsed = { height: 0, opacity: 0, overflow: "hidden" };
-  const open = { height: "auto", opacity: 1 };
   return (
-    <div>
-      <button
-        type="button"
-        onClick={() => setGrouped((g) => !g)}
-        aria-pressed={grouped}
-        className={`${iconButtonClass} mb-6`}
-      >
-        Change View
-      </button>
-      <AnimatePresence mode="wait" initial={false}>
-        {grouped ? (
-          <motion.div
-            key="grouped"
-            initial={collapsed}
-            animate={open}
-            exit={collapsed}
-            transition={{
-              duration: reduceMotion ? 0 : 0.3,
-              ease: [0.2, 0, 0.2, 1],
-            }}
-          >
-            <div className="space-y-6">
-              {skillGroups.map((g) => (
-                <section key={g.title}>
-                  <h3 className="mb-3">{g.title}</h3>
-                  <ul className="flex flex-wrap gap-y-2 -mx-1">
-                    {g.skills.map((s) => (
-                      <li key={s.name}>
-                        <SkillChip {...s} />
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-              ))}
-            </div>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="marquee"
-            initial={collapsed}
-            animate={open}
-            exit={collapsed}
-            transition={{
-              duration: reduceMotion ? 0 : 0.3,
-              ease: [0.2, 0, 0.2, 1],
-            }}
-          >
-            <div className="space-y-2">
-              <Row skills={skillRows[0]} reverse />
-              <Row skills={skillRows[1]} />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+    <div className="space-y-2">
+      <Row skills={skillRows[0]} reverse />
+      <Row skills={skillRows[1]} />
     </div>
   );
 }

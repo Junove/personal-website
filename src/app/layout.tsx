@@ -7,8 +7,16 @@ import { themeInitScript } from "@/components/ThemeToggle";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        { url: "/blog/rss.xml", title: "Nathaniel Endick — Blog" },
+        { url: "/projects/rss.xml", title: "Nathaniel Endick — Projects" },
+      ],
+    },
+  },
   title: "Home | Nathaniel Endick",
-  description: "DevOps Engineer specializing in security, privacy, distributed infrastructure, and automation. Creating software that just works.",
+  description: "Building human-focused tooling for the post-AI era. Currently a DevOps Engineer by day, and a tech enthusiast by night.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

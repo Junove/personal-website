@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
+import { Suspense, ViewTransition } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import IconLink from "@/components/IconButton";
@@ -8,9 +8,13 @@ import Section from "@/components/Section";
 import Card from "@/components/Card";
 import Tag from "@/components/Tag";
 import ProjectMedia from "@/components/ProjectMedia";
-import { projects, getProject } from "@/lib/projects";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import mdxComponents from "@/components/MdxComponents";
+import SubscribeForm from "@/components/SubscribeForm";
+import { getProjects, getProject } from "@/lib/projects";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const projects = await getProjects();
   return projects.map((project) => ({ slug: project.slug }));
 }
 
@@ -20,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) return {};
 
   return {
@@ -29,13 +33,20 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+type Props = { params: Promise<{ slug: string }> };
+
+// params is read inside Suspense so the route's static shell doesn't depend on the URL.
+export default function ProjectPage({ params }: Props) {
+  return (
+    <Suspense fallback={null}>
+      <Project params={params} />
+    </Suspense>
+  );
+}
+
+async function Project({ params }: Props) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) notFound();
 
   return (
@@ -69,19 +80,23 @@ export default async function ProjectPage({
                 ))}
               </ul>
 
-              <div className="mt-5 w-fit">
-                <IconLink href={project.link} label="GitHub">
-                  <Icon id="github" />
-                </IconLink>
-              </div>
+              {project.link && (
+                <div className="mt-5 w-fit">
+                  <IconLink href={project.link} label="GitHub">
+                    <Icon id="github" />
+                  </IconLink>
+                </div>
+              )}
             </div>
           </div>
         </Card>
       </ViewTransition>
 
-      <p className="text-base leading-relaxed mt-10 text-fg-soft">
-        {project.body}
-      </p>
+      <div className="mt-10">
+        <MDXRemote source={project.body} components={mdxComponents} />
+      </div>
+
+      <SubscribeForm className="mt-12" />
     </Section>
   );
 }

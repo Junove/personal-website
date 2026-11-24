@@ -9,8 +9,10 @@ type CardProps = {
   className?: string;
 };
 
-const base =
-  "relative overflow-hidden rounded-lg bg-surface-50 border-2 border-neutral-300 shadow-sm";
+/* M2 elevated card: shadow conveys elevation, no stroke (a border would
+   double up with the shadow, which M2 reserves for the separate "outlined"
+   card variant). */
+const base = "relative overflow-hidden rounded-lg bg-surface-50 shadow-sm";
 
 export default function Card({
   children,
