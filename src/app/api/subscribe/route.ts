@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { Confirm } from "@/emails/Confirm";
 import { site } from "@/lib/site";
 import { createToken, EMAIL_RE, env, resend } from "@/lib/subscribe";
 
@@ -19,9 +20,7 @@ export async function POST(request: Request) {
     from: env("RESEND_FROM"),
     to: email,
     subject: `Confirm your subscription to ${site.name}'s posts and projects`,
-    html: `<p>Confirm your subscription to new posts and projects from ${site.name}:</p>
-<p><a href="${link}">Confirm subscription</a></p>
-<p>If you didn't request this, ignore this email and nothing will happen.</p>`,
+    react: Confirm({ link }),
     text: `Confirm your subscription to new posts and projects from ${site.name}: ${link}\n\nIf you didn't request this, ignore this email.`,
   });
 

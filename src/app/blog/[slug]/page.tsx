@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Icon from "@/components/icons";
@@ -17,7 +18,18 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return post ? { title: `${post.title} | Nathaniel Endick`, description: post.excerpt } : {};
 }
 
-export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+type Props = { params: Promise<{ slug: string }> };
+
+// params is read inside Suspense so the route's static shell doesn't depend on the URL.
+export default function BlogPostPage({ params }: Props) {
+  return (
+    <Suspense fallback={null}>
+      <BlogPost params={params} />
+    </Suspense>
+  );
+}
+
+async function BlogPost({ params }: Props) {
   const { slug } = await params;
   const post = await getPost(slug);
   if (!post) notFound();

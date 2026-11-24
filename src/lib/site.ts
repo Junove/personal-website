@@ -13,7 +13,7 @@ export const site = {
   copyrightYear: 2026,
   tagline: "I'm building human-focused tooling for the post-AI era.",
   /** Canonical origin, no trailing slash. Used for RSS and email links. */
-  url: (process.env.SITE_URL ?? "http://localhost:3000").replace(/\/$/, ""),
+  url: (process.env.SITE_URL ?? "https://nathanielendick.dev").replace(/\/$/, ""),
 };
 
 export const bio = [

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ViewTransition } from "react";
+import { Suspense, ViewTransition } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import IconLink from "@/components/IconButton";
@@ -33,11 +33,18 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+type Props = { params: Promise<{ slug: string }> };
+
+// params is read inside Suspense so the route's static shell doesn't depend on the URL.
+export default function ProjectPage({ params }: Props) {
+  return (
+    <Suspense fallback={null}>
+      <Project params={params} />
+    </Suspense>
+  );
+}
+
+async function Project({ params }: Props) {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) notFound();

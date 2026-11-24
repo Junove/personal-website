@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { site } from "@/lib/site";
 import { env, resend, verifyToken } from "@/lib/subscribe";
 
-/** Step 2 of double opt-in: add the verified address to the blog and projects Resend segments. */
+/** Step 2 of double opt-in: add the verified address to the Resend segment and opt it into the posts and projects topics. */
 export async function GET(request: Request) {
   const done = (status: "confirmed" | "invalid") =>
     NextResponse.redirect(`${site.url}/subscribe/${status}`);
@@ -12,8 +12,12 @@ export async function GET(request: Request) {
 
   const { error } = await resend().contacts.create({
     email,
-    // Everyone joins both lists; separate segments let them diverge later.
-    segments: [{ id: env("RESEND_SEGMENT_ID") }, { id: env("RESEND_PROJECTS_SEGMENT_ID") }],
+    segments: [{ id: env("RESEND_SEGMENT_ID") }],
+    // Topics let a subscriber unsubscribe from posts or projects separately.
+    topics: [
+      { id: env("RESEND_POSTS_TOPIC_ID"), subscription: "opt_in" },
+      { id: env("RESEND_PROJECTS_TOPIC_ID"), subscription: "opt_in" },
+    ],
   });
   // Clicking the link twice (or re-subscribing) makes Resend report a duplicate
   // contact; the person is subscribed either way, so only real failures bail.
